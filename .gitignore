@@ -1,0 +1,7 @@
+# ignore files
+
+CoreWithSerilogDemo/bin/
+CoreWithSerilogDemo/obj/
+CoreWithSerilogDemo/*.log
+
+.vs/

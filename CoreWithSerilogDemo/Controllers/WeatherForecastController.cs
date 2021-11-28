@@ -28,13 +28,18 @@ namespace CoreWithSerilogDemo.Controllers
         {
             _logger.LogInformation("Enters into {controller}/{action} method", "WeatherForecast", "Get");
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            var arr = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+            foreach (var item in arr)
+            {
+                _logger.LogInformation("WeatherForecast Value:{@item}", item);
+            }
+            return arr;
         }
 
 

@@ -57,7 +57,7 @@ namespace CoreWithSerilogDemo
                                                        .MinimumLevel.ControlledBy(CacheObjects.LoggingLevelSwitch)
                                                        // this makes logs from the namespace starts with "Microsoft.AspNetCore" be not recorded
                                                        .MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Error)
-                                                       .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {ThreadId} {Version} [{SourceContext}] {Message:lj}{NewLine}{Exception}")
+                                                       .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss}] {Properties} {Message:lj}{NewLine}{Exception}")
                                                        .Filter.ByExcluding(Matching.WithProperty<int>("Count", o => o > 10))
                                                        .WriteTo.Logger(loggerConfig =>
                                                        {

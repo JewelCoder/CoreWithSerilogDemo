@@ -116,13 +116,22 @@ namespace CoreWithSerilogDemo.Controllers
             return "you have invoke TestLogginLevelSwitch method successfully.";
         }
 
+        [HttpGet]
         public String TestSourceText()
         {
             _logger.LogInformation("Enters into {controller}/{action} method", "WeatherForecast", "TestSourceText");
 
-
-
             return "you have invoke TestSourceText method successfully.";
+        }
+
+        [HttpGet]
+        public string TestSerilogRequestLoggingMiddleware(string para1, int para2)
+        {
+            _logger.LogInformation("Enters into {controller}/{action} method", "WeatherForecast", "TestSerilogRequestLoggingMiddleware");
+
+            System.Threading.Thread.Sleep(1100);
+
+            return "you have invoke TestSerilogRequestLoggingMiddleware method successfully.";
         }
     }
 }

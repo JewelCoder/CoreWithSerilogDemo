@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace CoreWithSerilogDemo
 {
@@ -25,7 +26,10 @@ namespace CoreWithSerilogDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(opt =>
+            {
+                opt.Filters.Add(typeof(RequestAndResonseFilter));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +39,29 @@ namespace CoreWithSerilogDemo
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSerilogRequestLogging(opt =>
+            {
+                opt.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                {
+                    if (httpContext.Request.Query.Any())
+                    {
+                        diagnosticContext.Set("QueryString", httpContext.Request.Query);
+                    }
+                };
+                opt.GetLevel = (httpContext, elapsed, exp) =>
+                {
+                    // this works on the response
+                    if (elapsed > 1000)
+                    {
+                        return Serilog.Events.LogEventLevel.Information;
+                    }
+                    else
+                    {
+                        return Serilog.Events.LogEventLevel.Error;
+                    }
+                };
+            });
 
             app.UseHttpsRedirection();
 
